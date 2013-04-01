@@ -180,6 +180,7 @@ module Icalendar
             adder = "add_" + name
             if component.respond_to?(adder)
               begin
+                raise "Frozen object!" if component.class == Event
                 component.send(adder, value, params)
               rescue => e
                 @@logger.fatal "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
