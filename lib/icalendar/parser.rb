@@ -185,7 +185,7 @@ module Icalendar
               rescue => e
                 @@logger.fatal "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
                 @@logger.fatal "icalendar: Error calling send(#{adder}, #{value}, #{params}) on #{component} (class: #{component.class})"
-                @@logger.fatal "icalendar: Source: #{component.class.instance_method(:initialize).source_locationc}"
+                @@logger.fatal "icalendar: Source: #{component.class.instance_method(:initialize).source_location}"
                 raise e
               end
             else
@@ -198,7 +198,7 @@ module Icalendar
               rescue => e
                 @@logger.fatal "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
                 @@logger.fatal "icalendar: Error calling send(#{name}, #{value}, #{params}) on #{component} (class: #{component.class})"
-                @@logger.fatal "icalendar: Source: #{component.class.instance_method(:initialize).source_locationc}"
+                @@logger.fatal "icalendar: Source: #{component.class.instance_method(:initialize).source_location}"
                 raise e
               end
             else
