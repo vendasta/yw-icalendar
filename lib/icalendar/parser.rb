@@ -100,7 +100,7 @@ module Icalendar
     def parse
       calendars = []
 
-      @@logger.info "icalendar: parsing..."
+      @@logger.fatal "icalendar: parsing..."
       # Outer loop for Calendar objects
       while (line = next_line) 
         fields = parse_line(line)
@@ -182,9 +182,9 @@ module Icalendar
               begin
                 component.send(adder, value, params)
               rescue => e
-                @@logger.warn "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
-                @@logger.warn "icalendar: Error calling send(#{adder}, #{value}, #{params}) on #{component} (class: #{component.class})"
-                @@logger.warn "icalendar: Source: #{component.class.method(:new).source_location}"
+                @@logger.fatal "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
+                @@logger.fatal "icalendar: Error calling send(#{adder}, #{value}, #{params}) on #{component} (class: #{component.class})"
+                @@logger.fatal "icalendar: Source: #{component.class.method(:new).source_location}"
                 raise e
               end
             else
@@ -195,9 +195,9 @@ module Icalendar
               begin
                 component.send(name, value, params)
               rescue => e
-                @@logger.warn "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
-                @@logger.warn "icalendar: Error calling send(#{name}, #{value}, #{params}) on #{component} (class: #{component.class})"
-                @@logger.warn "icalendar: Source: #{component.class.method(:new).source_location}"
+                @@logger.fatal "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
+                @@logger.fatal "icalendar: Error calling send(#{name}, #{value}, #{params}) on #{component} (class: #{component.class})"
+                @@logger.fatal "icalendar: Source: #{component.class.method(:new).source_location}"
                 raise e
               end
             else
