@@ -179,13 +179,25 @@ module Icalendar
           if component.multi_property?(name)
             adder = "add_" + name
             if component.respond_to?(adder)
-              component.send(adder, value, params)
+              begin
+                component.send(adder, value, params)
+              rescue Exception => e
+                @@logger.warn "Error calling send(#{adder}, #{value}, #{params}) on #{component} (class: #{component.class})"
+                @@logger.warn "  Source: #{component.class.method(:new).source_location}"
+                raise e
+              end
             else
               raise(UnknownPropertyMethod, "Unknown property type: #{adder}") if strict
             end
           else
             if component.respond_to?(name)
-              component.send(name, value, params)
+              begin
+                component.send(name, value, params)
+              rescue Exception => e
+                @@logger.warn "Error calling send(#{name}, #{value}, #{params}) on #{component} (class: #{component.class})"
+                @@logger.warn "  Source: #{component.class.method(:new).source_location}"
+                raise e
+              end
             else
               raise(UnknownPropertyMethod, "Unknown property type: #{name}") if strict
             end
