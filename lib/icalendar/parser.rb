@@ -100,7 +100,7 @@ module Icalendar
     def parse
       calendars = []
 
-      @@logger.debug "parsing..."
+      @@logger.fatal "icalendar: parsing..."
       # Outer loop for Calendar objects
       while (line = next_line) 
         fields = parse_line(line)
@@ -179,13 +179,27 @@ module Icalendar
           if component.multi_property?(name)
             adder = "add_" + name
             if component.respond_to?(adder)
-              component.send(adder, value, params)
+              begin
+                component.send(adder, value, params)
+              rescue => e
+                @@logger.fatal "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
+                @@logger.fatal "icalendar: Error calling send(#{adder}, #{value}, #{params}) on #{component} (class: #{component.class})"
+                @@logger.fatal "icalendar: Source: #{component.class.instance_method(:initialize).source_location}"
+                raise e
+              end
             else
               raise(UnknownPropertyMethod, "Unknown property type: #{adder}") if strict
             end
           else
             if component.respond_to?(name)
-              component.send(name, value, params)
+              begin
+                component.send(name, value, params)
+              rescue => e
+                @@logger.fatal "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
+                @@logger.fatal "icalendar: Error calling send(#{name}, #{value}, #{params}) on #{component} (class: #{component.class})"
+                @@logger.fatal "icalendar: Source: #{component.class.instance_method(:initialize).source_location}"
+                raise e
+              end
             else
               raise(UnknownPropertyMethod, "Unknown property type: #{name}") if strict
             end
