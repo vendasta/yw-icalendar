@@ -100,7 +100,7 @@ module Icalendar
     def parse
       calendars = []
 
-      @@logger.debug "parsing..."
+      @@logger.info "icalendar: parsing..."
       # Outer loop for Calendar objects
       while (line = next_line) 
         fields = parse_line(line)
@@ -181,9 +181,10 @@ module Icalendar
             if component.respond_to?(adder)
               begin
                 component.send(adder, value, params)
-              rescue Exception => e
-                @@logger.warn "Error calling send(#{adder}, #{value}, #{params}) on #{component} (class: #{component.class})"
-                @@logger.warn "  Source: #{component.class.method(:new).source_location}"
+              rescue => e
+                @@logger.warn "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
+                @@logger.warn "icalendar: Error calling send(#{adder}, #{value}, #{params}) on #{component} (class: #{component.class})"
+                @@logger.warn "icalendar: Source: #{component.class.method(:new).source_location}"
                 raise e
               end
             else
@@ -193,9 +194,10 @@ module Icalendar
             if component.respond_to?(name)
               begin
                 component.send(name, value, params)
-              rescue Exception => e
-                @@logger.warn "Error calling send(#{name}, #{value}, #{params}) on #{component} (class: #{component.class})"
-                @@logger.warn "  Source: #{component.class.method(:new).source_location}"
+              rescue => e
+                @@logger.warn "icalendar: Exception: #{e.message}, backtrace: #{e.backtrace.join("\n")}"
+                @@logger.warn "icalendar: Error calling send(#{name}, #{value}, #{params}) on #{component} (class: #{component.class})"
+                @@logger.warn "icalendar: Source: #{component.class.method(:new).source_location}"
                 raise e
               end
             else
