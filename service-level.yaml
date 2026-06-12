@@ -1,0 +1,6 @@
+services:
+  - name: yw-icalendar
+    owner: honey-badger
+    language: ruby
+    nonServiceType: library
+    description: "icalendar.rb main repository"
